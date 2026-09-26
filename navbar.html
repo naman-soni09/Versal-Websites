@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A responsive navigation bar built with HTML and CSS.">
+    <title>Northstar Navigation</title>
+    <style>
+        :root {
+            --background: #f4f6fb;
+            --surface: rgba(255, 255, 255, 0.92);
+            --text: #172033;
+            --muted: #667085;
+            --border: #e4e7ec;
+            --accent: #635bff;
+            --accent-dark: #4f46e5;
+            --shadow: 0 18px 50px rgba(16, 24, 40, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 10% 10%, rgba(99, 91, 255, 0.12), transparent 28rem),
+                radial-gradient(circle at 90% 70%, rgba(14, 165, 233, 0.1), transparent 25rem),
+                var(--background);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px;
+            background: transparent;
+        }
+
+        .navbar {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: min(100%, 1180px);
+            min-height: 72px;
+            margin: 0 auto;
+            padding: 12px 14px 12px 20px;
+            background: var(--surface);
+            border: 1px solid rgba(228, 231, 236, 0.9);
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(16, 24, 40, 0.08);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            flex-shrink: 0;
+            gap: 11px;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 40px;
+            height: 40px;
+            place-items: center;
+            color: #ffffff;
+            background: linear-gradient(145deg, var(--accent), #8b5cf6);
+            border-radius: 12px;
+            box-shadow: 0 8px 18px rgba(99, 91, 255, 0.3);
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .brand-copy {
+            display: grid;
+            line-height: 1.05;
+        }
+
+        .brand-copy strong {
+            font-size: 15px;
+            letter-spacing: 0.08em;
+        }
+
+        .brand-copy small {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .nav-panel {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: space-between;
+            gap: 28px;
+            margin-left: 48px;
+        }
+
+        .nav-links,
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-links {
+            gap: 8px;
+        }
+
+        .nav-link {
+            position: relative;
+            display: block;
+            padding: 10px 12px;
+            color: #475467;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 650;
+            text-decoration: none;
+            transition: color 160ms ease, background-color 160ms ease;
+        }
+
+        .nav-link:hover,
+        .nav-link:focus-visible {
+            color: var(--accent-dark);
+            background: #f2f1ff;
+            outline: none;
+        }
+
+        .nav-actions {
+            gap: 10px;
+        }
+
+        .button {
+            display: inline-flex;
+            min-height: 42px;
+            align-items: center;
+            justify-content: center;
+            padding: 0 18px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            font-size: 13px;
+            font-weight: 750;
+            text-decoration: none;
+            transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease;
+        }
+
+        .button:hover,
+        .button:focus-visible {
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .button-secondary {
+            color: var(--text);
+            background: #ffffff;
+        }
+
+        .button-secondary:hover,
+        .button-secondary:focus-visible {
+            color: var(--accent-dark);
+            border-color: #c7c3ff;
+            background: #f8f7ff;
+        }
+
+        .button-primary {
+            color: #ffffff;
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 7px 16px rgba(99, 91, 255, 0.22);
+        }
+
+        .button-primary:hover,
+        .button-primary:focus-visible {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+        }
+
+        .nav-toggle,
+        .menu-button {
+            display: none;
+        }
+
+        .hero {
+            display: grid;
+            width: min(100% - 32px, 1180px);
+            min-height: calc(100vh - 120px);
+            margin: 0 auto;
+            padding: 72px 0;
+            place-items: center;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 760px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 20px;
+            padding: 7px 12px;
+            color: var(--accent-dark);
+            background: #ecebff;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            width: 7px;
+            height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            content: "";
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(42px, 7vw, 78px);
+            line-height: 1.02;
+            letter-spacing: -0.055em;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            max-width: 600px;
+            margin: 24px auto 0;
+            color: var(--muted);
+            font-size: clamp(16px, 2vw, 19px);
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .hero-actions .button {
+            min-height: 48px;
+            padding-inline: 22px;
+        }
+
+        @media (max-width: 880px) {
+            .site-header {
+                padding: 12px;
+            }
+
+            .navbar {
+                min-height: 64px;
+                padding: 10px 12px 10px 16px;
+                border-radius: 16px;
+            }
+
+            .nav-toggle {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
+                clip: rect(0 0 0 0);
+                clip-path: inset(50%);
+                white-space: nowrap;
+            }
+
+            .menu-button {
+                position: relative;
+                display: grid;
+                width: 44px;
+                height: 44px;
+                margin-left: auto;
+                padding: 0;
+                place-items: center;
+                background: #f7f7fb;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                cursor: pointer;
+            }
+
+            .menu-button span {
+                position: absolute;
+                width: 20px;
+                height: 2px;
+                background: var(--text);
+                border-radius: 999px;
+                transition: transform 180ms ease, opacity 180ms ease, top 180ms ease;
+            }
+
+            .menu-button span:nth-child(1) {
+                top: 14px;
+            }
+
+            .menu-button span:nth-child(2) {
+                top: 21px;
+            }
+
+            .menu-button span:nth-child(3) {
+                top: 28px;
+            }
+
+            .nav-toggle:focus-visible + .menu-button {
+                outline: 3px solid rgba(99, 91, 255, 0.25);
+                outline-offset: 2px;
+            }
+
+            .nav-toggle:checked + .menu-button span:nth-child(1) {
+                top: 21px;
+                transform: rotate(45deg);
+            }
+
+            .nav-toggle:checked + .menu-button span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle:checked + .menu-button span:nth-child(3) {
+                top: 21px;
+                transform: rotate(-45deg);
+            }
+
+            .nav-panel {
+                position: absolute;
+                top: calc(100% + 8px);
+                right: 0;
+                left: 0;
+                display: grid;
+                max-height: 0;
+                margin: 0;
+                padding: 0 18px;
+                overflow: hidden;
+                visibility: hidden;
+                background: rgba(255, 255, 255, 0.98);
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                box-shadow: var(--shadow);
+                opacity: 0;
+                transform: translateY(-8px);
+                transition: max-height 240ms ease, padding 240ms ease, opacity 180ms ease, transform 240ms ease, visibility 240ms;
+            }
+
+            .nav-toggle:checked ~ .nav-panel {
+                max-height: 390px;
+                padding-top: 14px;
+                padding-bottom: 18px;
+                visibility: visible;
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .nav-links {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .nav-link {
+                padding: 12px 10px;
+            }
+
+            .nav-actions {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                margin-top: 12px;
+                padding-top: 14px;
+                border-top: 1px solid var(--border);
+            }
+        }
+
+        @media (max-width: 440px) {
+            .brand-copy small {
+                display: none;
+            }
+
+            .brand-mark {
+                width: 38px;
+                height: 38px;
+            }
+
+            .hero {
+                min-height: calc(100vh - 96px);
+                padding: 52px 0;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .hero-actions .button {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar" aria-label="Main navigation">
+            <a class="brand" href="#home" aria-label="Northstar home">
+                <span class="brand-mark" aria-hidden="true">N</span>
+                <span class="brand-copy">
+                    <strong>NORTHSTAR</strong>
+                    <small>Digital Studio</small>
+                </span>
+            </a>
+
+            <input class="nav-toggle" type="checkbox" id="nav-toggle" aria-controls="nav-panel" aria-label="Toggle navigation menu">
+            <label class="menu-button" for="nav-toggle" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
+            <div class="nav-panel" id="nav-panel">
+                <ul class="nav-links">
+                    <li><a class="nav-link" href="#home">Home</a></li>
+                    <li><a class="nav-link" href="#about">About</a></li>
+                    <li><a class="nav-link" href="#services">Services</a></li>
+                    <li><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+                <ul class="nav-actions">
+                    <li><a class="button button-secondary" href="#login">Log in</a></li>
+                    <li><a class="button button-primary" href="#signup">Get started</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="hero" id="home">
+        <div class="hero-content">
+            <p class="eyebrow">Responsive by design</p>
+            <h1>A navigation bar that fits <span>every screen.</span></h1>
+            <p>A clean, accessible menu built with semantic HTML and modern CSS. Resize the page to see the compact mobile navigation.</p>
+            <div class="hero-actions">
+                <a class="button button-primary" href="#services">Explore services</a>
+                <a class="button button-secondary" href="#about">Learn more</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
